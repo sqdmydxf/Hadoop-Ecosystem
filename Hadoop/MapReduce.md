@@ -115,7 +115,7 @@ org.apache.hadoop.mapred.JobConf extends Configuration
 		--> worker.firstTask = null													// 清空worker的第一个mapTask
 		-->	w.unlock()																// 解锁worker,用于执行下一个mapTask
 		--> task.run()																// 调用LocalJobRunner.Job.MapTask的run方法，执行mapTask
-			--> 生成TaskAttemptID(mapID)												// 生成mapTaskID[JobID_m_taskID]
+			--> 生成TaskAttemptID(mapID)											// 生成mapTaskID[JobID_m_taskID]
 			--> childMapredLocalDir													// 获取mapTask的本地目录
 				// /tmp/hadoop-xw/mapred/local/localRunner//xw/jobcache/job_local677056674_0001[JobID]/attempt_local677056674_0001_m_000000_0[mapID]
 			--> org.apache.hadoop.mapred.MapTask.run(localConf, Job.this)[*]		// 运行mapTask
