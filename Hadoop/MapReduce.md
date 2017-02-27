@@ -1,4 +1,12 @@
 ##Map和Reduce过程分析
+**说在前面的话**
+	最近在自学Hadoop，通过看视频和自己写程序编译查看源代码，查看Hadoop中MapReduce的运行流程。
+	以下流程是根据Hadoop权威指南上的实现获取ncdc每年最高气温的代码进行调试，在Hadoop本地模式中查看其运行流程。
+	操作系统：Ubuntu16.04
+	IDE：eclipse
+	Hadoop集群环境：本地模式
+	一开始是通过intellij idea中的maven项目进行调试，但是发现其中的注释比较少，而且调试的时候出现一些问题，因此换到了eclipse中进行调试，最后跑通整个过程。
+***
 1.**MRJob 配置的常量所在的类**
 ```
 org.apache.hadoop.mapreduce.MRJobConfig
