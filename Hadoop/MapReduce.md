@@ -47,7 +47,7 @@ org.apache.hadoop.mapred.JobConf extends Configuration
 			-->new Cluster(getConfiguration())
 		--> org.apache.hadoop.mapreduce.JobSubmitter.submitJobInternal()[*]			// 内部提交
 			--> checkSpecs(job)														// 需要输入目录不能存在
-			--> 设置jobStagingArea,并创建目录											// [file:/tmp/hadoop-xw/mapred/staging/xw902757940/.staging]
+			--> 设置jobStagingArea,并创建目录										// [file:/tmp/hadoop-xw/mapred/staging/xw902757940/.staging]
 			--> ip
 			--> JobID																// job_local902757940(randID:随机数)_0001(jobID)
 			--> 设置submitJobDir													
@@ -115,7 +115,7 @@ org.apache.hadoop.mapred.JobConf extends Configuration
 		--> worker.firstTask = null													// 清空worker的第一个mapTask
 		-->	w.unlock()																// 解锁worker,用于执行下一个mapTask
 		--> task.run()																// 调用LocalJobRunner.Job.MapTask的run方法，执行mapTask
-			--> 生成TaskAttemptID(mapID)											// 生成mapTaskID[JobID_m_taskID]
+			--> 生成TaskAttemptID(mapID)												// 生成mapTaskID[JobID_m_taskID]
 			--> childMapredLocalDir													// 获取mapTask的本地目录
 				// /tmp/hadoop-xw/mapred/local/localRunner//xw/jobcache/job_local677056674_0001[JobID]/attempt_local677056674_0001_m_000000_0[mapID]
 			--> org.apache.hadoop.mapred.MapTask.run(localConf, Job.this)[*]		// 运行mapTask
