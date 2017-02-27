@@ -10,7 +10,7 @@
 	IDE：eclipse
 
 	Hadoop集群环境：本地模式
-	
+
 	一开始是通过intellij idea中的maven项目进行调试，但是发现其中的注释比较少，而且调试的时候出现一些问题，因此换到了eclipse中进行调试，最后跑通整个过程。
 ***
 1.**MRJob 配置的常量所在的类**
@@ -36,6 +36,7 @@ org.apache.hadoop.mapred.JobConf extends Configuration
 		    Configuration.addDefaultResource("yarn-site.xml");			// 加载默认yarn-site.xml
 ```
 4.**配置自定义设置**
+
 5.**通过waitForCompletion()分析MR**
 ```
 --> org.apache.hadoop.mapreduce.Job.waitForCompletion(true)							// 等待完成
