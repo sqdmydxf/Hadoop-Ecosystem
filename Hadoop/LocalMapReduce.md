@@ -56,11 +56,11 @@ org.apache.hadoop.mapred.JobConf extends Configuration
 			--> copyAndConfigureFiles(job, submitJobDir)							// 拷贝和配置文件到文件系统中(上传文件到文件系统中)
 				--> JobResourceUploader.uploadFiles()								// 上传文件到[file:/tmp/hadoop-xw/mapred/staging/xw902757940/.staging目录
 				下，即创建job_local902757940_0001(JobID)]目录
-				--> job.getWorkingDirectory()										// 获取工作目录，即项目目录
+				--> job.getWorkingDirectory()										// 获取工作目录，local模式下即是项目目录
 				[file:/D:/MyDocument/Y1Document/code/java/eclipse/HadoopDemo]
 			--> submitJobFile														// 设置作业的自定义配置文件
 				[file:/tmp/hadoop-xw/mapred/staging/xw268204430/.staging/job_local268204430_0001/job.xml]
-			--> writeSplits(job, submitJobDir)										// 获取需要map的输入文件，并进行排序，切割，写入
+			--> writeSplits(job, submitJobDir)										// 写入切片文件[切片文件的个数即是mapTask的个数]，并进行排序，切割，写入
 				--> List splits = input.getSplits(job)								// 获取需要map的输入文件
 				--> Arrays.sort(array, new JobSubmitter.SplitComparator(null))		// 按文件大小进行排序	
 				--> JobSplitWriter.createSplitFiles(...)							// 文件切割并写入临时文件夹submitJobDir
