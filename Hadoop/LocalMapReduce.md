@@ -152,7 +152,7 @@ org.apache.hadoop.mapred.JobConf extends Configuration
 				// /tmp/hadoop-xw/mapred/local/localRunner//xw/jobcache/job_local677056674_0001[JobID]/attempt_local677056674_0001_r_000000_0[reduceID]
 			--> org.apache.hadoop.mapred.ReduceTask.run(localConf, Job.this)[*]		// 运行reduceTask
 				--> if (isMapOrReduce())											// 判断是否是mapreduce
-					--> copyPhase = getProgress().addPhase("copy");					// shuffle过程就是拷贝的过程
+					--> copyPhase = getProgress().addPhase("copy");					// shuffle过程就是拷贝排序的过程[即将map的输出转换为reduce的输入的过程]
 					-->	sortPhase  = getProgress().addPhase("sort");
 					--> reducePhase = getProgress().addPhase("reduce");				// 若是，则reduce分为copy,sort,reduce三个阶段
 				--> startReporter(umbilical)										// 启动报告器
