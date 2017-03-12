@@ -60,12 +60,12 @@ TYPE								// 事件类型TYPE，即事件拥有的各种状态，即事件生�
 --> serviceStart()												// 用于在事件状态由INITED向STARTED转换时调用，即事件初始化完成，启动事件时调用
 	--> createThread()											// 创建提取分发线程
 		--> eventQueue.take()									// 从事件队列中提取事件
-		--> dispatch(event)										// 按照事件类型*一次分发*事件
+		--> dispatch(event)										// 按照事件类型一次分发事件
 			--> event.getType().getDeclaringClass()				// 获取事件类型
 			--> eventDispatchers.get(type)						// 根据类型获取相应的处理器
 			--> handler.handle(event)							// 调用处理器的handle方法进行处理
 				--> rmContext.getRMApps().get(appID)			// 通过appID获取RMApp
-				--> rmApp.handle(event)							// 调用RMApp的handle方法进行处理，即*二次分发*
+				--> rmApp.handle(event)							// 调用RMApp的handle方法进行处理，即二次分发
 ```
 6.**job提交到集群之后的状态变换**
 ```
