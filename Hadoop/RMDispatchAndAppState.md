@@ -38,7 +38,7 @@ TYPE								// 事件类型TYPE，即事件拥有的各种状态，即事件生�
 4.**RM二次分发图解**
 ![RM二次分图解](images/RM2Dispatch.png)
 5.**二次分发调试解析**
-```ResourceManager```
+``ResourceManager``
 ```
 --> ResourceManager.main()										// ResourceManager入口main函数
 	--> new YarnConfiguration()									// 设置YarnConfiguration，即core-default.xml, core-site.xml, yarn-default.xml, yarn-site.xml
@@ -54,7 +54,7 @@ TYPE								// 事件类型TYPE，即事件拥有的各种状态，即事件生�
 				--> addService(adminService)					// 为服务注册处理器，即把映射关系放入AsyncDispatcher.eventDispatchers集合中
 				--> add...										// 为其他常在服务注册处理器
 ```
-```AsyncDispatcher```
+``AsyncDispatcher``
 ```
 --> serviceStart()												// 用于在事件状态由INITED向STARTED转换时调用，即事件初始化完成，启动事件时调用
 	--> createThread()											// 创建提取分发线程
