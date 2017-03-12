@@ -60,12 +60,12 @@ TYPE								// 事件类型TYPE，即事件拥有的各种状态，即事件生�
 --> serviceStart()												// 用于在事件状态由INITED向STARTED转换时调用，即事件初始化完成，启动事件时调用
 	--> createThread()											// 创建提取分发线程
 		--> eventQueue.take()									// 从事件队列中提取事件
-		--> dispatch(event)										// 按照事件类型\*一次分发\*事件
+		--> dispatch(event)										// 按照事件类型*一次分发*事件
 			--> event.getType().getDeclaringClass()				// 获取事件类型
 			--> eventDispatchers.get(type)						// 根据类型获取相应的处理器
 			--> handler.handle(event)							// 调用处理器的handle方法进行处理
 				--> rmContext.getRMApps().get(appID)			// 通过appID获取RMApp
-				--> rmApp.handle(event)							// 调用RMApp的handle方法进行处理，即\*二次分发\*
+				--> rmApp.handle(event)							// 调用RMApp的handle方法进行处理，即*二次分发*
 ```
 6.**job提交到集群之后的状态变换**
 ```
@@ -80,52 +80,52 @@ TYPE								// 事件类型TYPE，即事件拥有的各种状态，即事件生�
 --> // 事件转换状态之后，仍会被放到eventQueue队列中等待处理
 --> AsyncDispatcher$GenericEventHandler.handle(Event event)
 
---> handle(RMAppEvent event)									// EventType: APP_NEW_SAVED || UI State: NEW_SAVING
+--> handle(RMAppEvent event)									// EventType: APP_NEW_SAVED 		|| UI State: NEW_SAVING
 	--> ...[重复以上过程]
 
---> handle(RMAppEvent event)									// EventType: APP_ACCEPTED || UI State: SUBMITTED
+--> handle(RMAppEvent event)									// EventType: APP_ACCEPTED 			|| UI State: SUBMITTED
 	--> ...
 
---> ApplicationAttemptEventDispatcher.handle(RMAppEvent event)	// EventType: NEW || UI State: ACCEPTED
+--> ApplicationAttemptEventDispatcher.handle(RMAppEvent event)	// EventType: NEW 					|| UI State: ACCEPTED
 	--> ...
 
---> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: START || UI State: ACCEPTED
+--> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: START 				|| UI State: ACCEPTED
 	--> ...
 
---> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: ATTEMPT_ADDED || UI State: ACCEPTED
+--> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: ATTEMPT_ADDED 		|| UI State: ACCEPTED
 	--> ...
 
---> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: CONTAINER_ALLOCATED || UI State: ACCEPTED
+--> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: CONTAINER_ALLOCATED 	|| UI State: ACCEPTED
 	--> ...
 
---> handle(RMAppEvent event)									// EventType: APP_RUNNING_ON_NODE || UI State: ACCEPTED
+--> handle(RMAppEvent event)									// EventType: APP_RUNNING_ON_NODE 	|| UI State: ACCEPTED
 	--> // 更新进度
 
---> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: ATTEMPT_NEW_SAVED || UI State: ACCEPTED
+--> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: ATTEMPT_NEW_SAVED 	|| UI State: ACCEPTED
 	--> ...
 
---> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: LAUNCHED || UI State: ACCEPTED
+--> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: LAUNCHED 				|| UI State: ACCEPTED
 	--> ...
 
---> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: REGISTERED || UI State: ACCEPTED
+--> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: REGISTERED 			|| UI State: ACCEPTED
 	--> ...
 
---> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: STATUS_UPDATE || UI State: ACCEPTED [尝试多次]
+--> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: STATUS_UPDATE 		|| UI State: ACCEPTED [尝试多次]
 	--> ...
 
---> handle(RMAppEvent event)									// EventType: APP_RUNNING_ON_NODE || UI State: RUNNING
+--> handle(RMAppEvent event)									// EventType: APP_RUNNING_ON_NODE 	|| UI State: RUNNING
 	--> // 更新进度
 
---> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: STATUS_UPDATE || UI State: RUNNING [尝试多次]
+--> ApplicationAttemptEventDispatcherhandle(RMAppEvent event)	// EventType: STATUS_UPDATE 		|| UI State: RUNNING [尝试多次]
 	--> ...
 
---> handle(RMAppEvent event)									// EventType: APP_RUNNING_ON_NODE || UI State: RUNNING
+--> handle(RMAppEvent event)									// EventType: APP_RUNNING_ON_NODE 	|| UI State: RUNNING
 	--> // 更新进度
 
---> handle(RMAppEvent event)									// EventType: ATTEMPT_UNREGISTERED || UI State: RUNNING
+--> handle(RMAppEvent event)									// EventType: ATTEMPT_UNREGISTERED 	|| UI State: RUNNING
 	--> // 更新进度
 
---> handle(RMAppEvent event)									// EventType: APP_UPDATE_SAVED || UI State: RUNNING || FinalStatus: SUCCEEDED
+--> handle(RMAppEvent event)									// EventType: APP_UPDATE_SAVED 		|| UI State: RUNNING 	|| FinalStatus: SUCCEEDED
 	--> // 更新进度
 
 --> FINISHED
