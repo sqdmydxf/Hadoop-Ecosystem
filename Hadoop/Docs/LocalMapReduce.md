@@ -1,4 +1,5 @@
 ##Map和Reduce过程分析
+
 **说在前面的话**
 
 	最近在自学Hadoop，通过看视频和自己写程序编译查看源代码，查看Hadoop中MapReduce的运行流程。
@@ -11,7 +12,8 @@
 
 	Hadoop集群环境：本地模式
 
-	一开始是通过intellij idea中的maven项目进行调试，但是发现其中的注释比较少，而且调试的时候出现一些问题，因此换到了eclipse中进行调试，最后跑通整个过程。
+	一开始是通过intellij idea中的maven项目进行调试，但是发现其中的注释比较少，而且调试的时候出现一些问题，
+	因此换到了eclipse中进行调试，最后跑通整个过程。
 ***
 1.**MRJob 配置的常量所在的类**
 ```
@@ -19,14 +21,14 @@ org.apache.hadoop.mapreduce.MRJobConfig
 ```
 2.**状态说明**
 ```
-JobState {DEFINE, RUNNING}												// 作业状态，两种
+JobState {DEFINE, RUNNING}				 // 作业状态，两种
 TaskStatusFilter { NONE, KILLED, FAILED, SUCCEEDED, ALL }				// 任务状态，五种
 ```
 3.**配置文件加载**
 ```
 org.apache.hadoop.conf.Configuration
-	addDefaultResource("core-default.xml");  							// 加载core-default.xml
-    addDefaultResource("core-site.xml");								// 加载core-site.xml
+	addDefaultResource("core-default.xml");  					// 加载core-default.xml
+    addDefaultResource("core-site.xml");						// 加载core-site.xml
 
 org.apache.hadoop.mapred.JobConf extends Configuration
 	--> org.apache.hadoop.mapreduce.util.ConfigUtil.loadResources()

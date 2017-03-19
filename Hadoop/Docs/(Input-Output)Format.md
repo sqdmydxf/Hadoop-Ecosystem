@@ -1,4 +1,5 @@
 ##InputFormat & OutputFormat分析
+
 **说在前面的话**
 
 	最近在自学Hadoop，通过看视频和自己写程序编译查看源代码，查看Hadoop中InputFormat & OutputFormat的作用。
@@ -47,9 +48,9 @@
 ```
 1. 用于处理普通的文本文件，将文件打散成行
 2. RecordReader的实现是LineRecordReader，即收集的key-value键值对是行偏移量和行，这些key-value键值对就是Mapper的输入
-	即说明，对于通过的文本文件的Mapper处理，是按照行处理的，因此，即使splitsize小于一行数据的大小，也不会对行进行切分
-	实践证明如下：
-	blocksize 需是512的倍数
+   即说明，对于通过的文本文件的Mapper处理，是按照行处理的，因此，即使splitsize小于一行数据的大小，也不会对行进行切分
+   实践证明如下：
+   blocksize 需是512的倍数
 1. splitsize < blocksize < linesize
 	只有一行数据
 	spiltsizemin = 60
@@ -172,10 +173,10 @@
 		split个数为7，setup和cleanup被调用7次，但是map方法是针对每一行的，即每一行都会调用一次map方法。
 
 4. 对于不可切分的文件，例如gz压缩文件，不可切分，但是hdfs层面上存储的时候，还是会分为多个block，block的块数由blocksize决定，
-	但是由于不可切分，所以，split的个数为1，由一个mapTask处理，调用一次setup和cleanup，每行调用一次map函数，
-	即一个mapTask调用多次map函数。
-	处理数据：1902.gz
-	处理结果：
+   但是由于不可切分，所以，split的个数为1，由一个mapTask处理，调用一次setup和cleanup，每行调用一次map函数，
+   即一个mapTask调用多次map函数。
+   处理数据：1902.gz
+   处理结果：
 		number of splits:1
 		map
 		s04-Mapper@7fd4acee-cle=1
@@ -200,8 +201,9 @@
 		s04-Reducer@28d6290-red-1902=1
 		s04-Reducer@28d6290-set=1
 
-综上：split的个数决定了mapTask的个数，一个mapTask为一个Mapper的完整生命周期，即setup和cleanup被调用的次数为mapTask的个数，但是map函数是针对每一行的，即每一
-行都会调用一次map函数，所以，map函数被调用的次数由输入的key/value的个数，即输入的行数决定，即一个mapTask可以调用多次map函数。
+综上：split的个数决定了mapTask的个数，一个mapTask为一个Mapper的完整生命周期，即setup和cleanup被调用的次数为mapTask的个数，
+	  但是map函数是针对每一行的，即每一行都会调用一次map函数，所以，map函数被调用的次数由输入的key/value的个数，
+	  即输入的行数决定，即一个mapTask可以调用多次map函数。
 ```
 2.**``SequenceFile``**
 ```
@@ -213,34 +215,38 @@
 ```
 3.**``WholeFile``**
 ```
-1. WholeFile是一个不可切分的文件，整个文件作为一个整体进行Mapper操作，key为NullWritable，value为BytesWritable，即将整个文件作为一个value存放到字节数组中
-2. 需要自定义WholeFileInputFormat，其继承FileInputFormat<NullWritable, BytesWritable>，用于对WholeFile进行描述，并设置其为不可切分
-3. 需要自定义WholeRecordReader，用于WholeFile的读取工作，只要是nextKeyValue()函数，获取下一对key-value键值对，key为NullWritable，value即为整个文件，将其存
-	放到BytesWritable中，即流的读取。
+1. WholeFile是一个不可切分的文件，整个文件作为一个整体进行Mapper操作，key为NullWritable，value为BytesWritable，
+   即将整个文件作为一个value存放到字节数组中
+2. 需要自定义WholeFileInputFormat，其继承FileInputFormat<NullWritable, BytesWritable>，用于对WholeFile进行描述，
+   并设置其为不可切分
+3. 需要自定义WholeRecordReader，用于WholeFile的读取工作，只要是nextKeyValue()函数，获取下一对key-value键值对，
+   key为NullWritable，value即为整个文件，将其存放到BytesWritable中，即流的读取。
 ```
 4.**``DB``**
 ```
 --> DBWritable
-	1. 自定义读写数据库的对象应继承DBWritable[该对象相当于表中的一条记录，也可以说是一个数据模型，是数据库和HDFS的中间数据，是Mapper处理的value值]
-	2. 函数说明：
-		readFields(ResultSet)					// 将ResultSet中的记录读到自定义对象中的属性中
-		write(PreparedStatement statement)		// 将自定义的对象的字段设置到PreparedStatement中，以便更新数据库
+1. 自定义读写数据库的对象应继承DBWritable
+   [该对象相当于表中的一条记录，也可以说是一个数据模型，是数据库和HDFS的中间数据，是Mapper处理的value值]
+2. 函数说明：
+   readFields(ResultSet)					// 将ResultSet中的记录读到自定义对象中的属性中
+   write(PreparedStatement statement)		// 将自定义的对象的字段设置到PreparedStatement中，以便更新数据库
 
 --> DBRecordReader
-	DBRecordReader.nextKeyValue()分析：
-	1) 将自定义的DBWritable作为Mapper的value值
-	2) 如果第一次调用nextKeyValue()函数，则读取数据库中的数据到results中
+DBRecordReader.nextKeyValue()分析：
+1) 将自定义的DBWritable作为Mapper的value值
+2) 如果第一次调用nextKeyValue()函数，则读取数据库中的数据到results中
 	if (null == this.results) {
         // First time into this method, run the query.
         this.results = executeQuery(getSelectQuery());
     }
-	3) 判断结果集中是否有下一条数据，同时游标下移
+3) 判断结果集中是否有下一条数据，同时游标下移
 	if (!results.next())
         return false;
-	4) 读取一条记录到自定义对象中
+4) 读取一条记录到自定义对象中
 	value.readFields(results)
 
 --> DBOutputFormat
-	1. 将reduce的输出写入到数据库中
-	2. DBOutputFormat接受一个key-value键值对，其中key是自定义的DBWritable类型，通过DBRecordWriter向数据库写入数据，它只将key写入到数据库中
+1. 将reduce的输出写入到数据库中
+2. DBOutputFormat接受一个key-value键值对，其中key是自定义的DBWritable类型，通过DBRecordWriter向数据库写入数据
+   注：它只将key写入到数据库中
 ```

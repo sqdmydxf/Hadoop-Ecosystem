@@ -1,4 +1,5 @@
 ##完全分布式集群下Resourcemanager二次分发以及作业提交到集群后状态的变化
+
 **说在前面的话**
 
 	最近在自学Hadoop，通过远程调试，查看Hadoop中完全分布式下Resourcemanager二次分发以及作业提交到集群后状态的变化。
