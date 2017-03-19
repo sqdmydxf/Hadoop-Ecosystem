@@ -1,6 +1,7 @@
-##Hadoop中HA设置
+## Hadoop中HA设置
 
 **说在前面的话**
+
 	本文设置的HA为手动式的，后期会添加利用Zookeeper设置自动HA
 
 	Hadoop集群环境：完全分布式模式
@@ -10,6 +11,7 @@
 	HA解决的是高可用问题，高可用不等同于高性能，高可用是为了可靠性
 
 2.**架构**
+
 	在一个典型的HA集群中，有两台namenode，在任一时刻，只有其中的一个namenode处于active状态，另一个处于standby状态，处于active状态的namenode提供服务，而
 
 处于standby状态的namenode仅仅作为一个附属，同时需要维持足够的状态，在需要的时候提供快速容错。
@@ -30,8 +32,8 @@ standby节点可以读取JNs中的编辑日志，同时，standby节点会持续
 
 3.**IDs**
 ```
-	nameservice ID：HA集群ID
-	NameNode ID：HA集群中namenode的ID
+nameservice ID：HA集群ID
+NameNode ID：HA集群中namenode的ID
 ```
 4.**配置细节**
 ```
