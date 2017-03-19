@@ -14,9 +14,9 @@
 2. InputFormat对于一个Map-Reduce框架的作用 :
 	1) 确认一个作业的指定输入
 	2) 把输入的文件切分成逻辑上的InputSplit，每一个InputSplit被分配给一个Mapper，即InputSplit和MapTask一一对应
-		[逻辑上是指将输入的文件以开始位置和偏移量做一个逻辑上的切分，而不是真的把文件进行切割]
+	   [逻辑上是指将输入的文件以开始位置和偏移量做一个逻辑上的切分，而不是真的把文件进行切割]
 	3) 提供RecordReader的实现，其为Mapper的处理从逻辑上的InputSplit中收集输入记录[该输入记录即是key-value的形式]
-		[RecordReader是针对每一个InputSplit的，在InputSplit使用之前会调用 RecordReader.initialize()方法]
+	   [RecordReader是针对每一个InputSplit的，在InputSplit使用之前会调用 RecordReader.initialize()方法]
 3. 基于文件的InputFormat，典型的是 FileInputFormat，的默认行为是将输入的文件按照文件的字节总大小进行切片；
 	但是输入切片大小的上限是该输入文件在该文件系统上的块大小，
 	而切片大小的下限可以由 mapreduce.input.fileinputformat.split.minsize进行设置
@@ -34,20 +34,20 @@
 ```
 1. OutputFormat是对一个Map-Reduce作业的指定输出的描述
 2. OutputFormat对于一个Map-Reduce框架的作用 :
-	1) 确认一个作业的指定输出，例如检查输出目录是否存在，对应了checkOutputSpecs(...)函数
-	2) 提供一个 RecordWriter的实现，用于将作业的输出文件写入到文件系统中，对应了getRecordWriter(...)函数
+   1) 确认一个作业的指定输出，例如检查输出目录是否存在，对应了checkOutputSpecs(...)函数
+   2) 提供一个 RecordWriter的实现，用于将作业的输出文件写入到文件系统中，对应了getRecordWriter(...)函数
 ```
 4.**``org.apache.hadoop.mapreduce.RecordWriter``**
 ```
 1. 将输出的键值对写入到文件系统中
 2. 函数说明：
-	write(K key, V value)		// 写入到文件系统的也是key-value键值对
+   write(K key, V value)		// 写入到文件系统的也是key-value键值对
 ```
 ###几种常用的InputFormat & OutputFormat
 1.**``org.apache.hadoop.mapreduce.lib.input.TextInputFormat``**
 ```
 1. 用于处理普通的文本文件，将文件打散成行
-2. RecordReader的实现是LineRecordReader，即收集的key-value键值对是行偏移量和行，这些key-value键值对就是Mapper的输入
+2. RecordReader的实现是LineRecordReader，即收集的key-value键值对是行偏移量和行，这些key-value键值对就是Mapper的输入，
    即说明，对于通过的文本文件的Mapper处理，是按照行处理的，因此，即使splitsize小于一行数据的大小，也不会对行进行切分
    实践证明如下：
    blocksize 需是512的倍数
@@ -217,8 +217,8 @@
 ```
 1. WholeFile是一个不可切分的文件，整个文件作为一个整体进行Mapper操作，key为NullWritable，value为BytesWritable，
    即将整个文件作为一个value存放到字节数组中
-2. 需要自定义WholeFileInputFormat，其继承FileInputFormat<NullWritable, BytesWritable>，用于对WholeFile进行描述，
-   并设置其为不可切分
+2. 需要自定义WholeFileInputFormat，其继承FileInputFormat<NullWritable, BytesWritable>，
+   用于对WholeFile进行描述，并设置其为不可切分
 3. 需要自定义WholeRecordReader，用于WholeFile的读取工作，只要是nextKeyValue()函数，获取下一对key-value键值对，
    key为NullWritable，value即为整个文件，将其存放到BytesWritable中，即流的读取。
 ```
