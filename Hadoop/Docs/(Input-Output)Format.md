@@ -2,7 +2,7 @@
 
 **说在前面的话**
 
-	最近在自学Hadoop，通过看视频和自己写程序编译查看源代码，查看Hadoop中InputFormat & OutputFormat的作用。
+	本文用于查看Hadoop中InputFormat & OutputFormat的作用。
 
 	IDE：eclipse
 
@@ -43,7 +43,7 @@
 2. 函数说明：
    write(K key, V value)		// 写入到文件系统的也是key-value键值对
 ```
-###几种常用的InputFormat & OutputFormat
+### 几种常用的InputFormat & OutputFormat
 1.**``org.apache.hadoop.mapreduce.lib.input.TextInputFormat``**
 ```
 1. 用于处理普通的文本文件，将文件打散成行

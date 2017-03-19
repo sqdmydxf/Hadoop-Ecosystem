@@ -2,7 +2,7 @@
 
 **说在前面的话**
 
-    最近在自学Hadoop，通过看视频和自己写程序编译查看源代码，查看Hadoop中MapReduce的运行流程。
+    本文用于查看Hadoop中MapReduce的运行流程。
 
     以下流程是根据Hadoop权威指南上的实现获取ncdc每年最高气温的代码进行调试，在Hadoop本地模式中查看其运行流程。
 
