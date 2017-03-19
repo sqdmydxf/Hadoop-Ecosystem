@@ -12,12 +12,14 @@
 
 2.**架构**
 
-	在一个典型的HA集群中，有两台namenode，在任一时刻，只有其中的一个namenode处于active状态，另一个处于standby状态，处于active状态的namenode提供服务，而处于standby状态的namenode仅仅作为一个附属，同时需要维持
+    在一个典型的HA集群中，有两台namenode，在任一时刻，只有其中的一个namenode处于active状态，另一个处于standby状态，处于active状态的namenode提供服务，而处于standby状态的namenode仅仅作为一个附属，同时需要维持
 足够的状态，在需要的时候提供快速容错。
-	为了保持standby节点和active节点同步，两个节点和一组 “JournalNodes” (JNs)守护进程通信，当active节点修改了命名空间，修改记录会以日志的方式写入到JNs中，standby节点可以读取JNs中的编辑日志，同时，standby节点
+
+    为了保持standby节点和active节点同步，两个节点和一组 “JournalNodes” (JNs)守护进程通信，当active节点修改了命名空间，修改记录会以日志的方式写入到JNs中，standby节点可以读取JNs中的编辑日志，同时，standby节点
 会持续的监控JNs中编辑日志的变化，当standby节点读到编辑日志，它就会应用到自己的命名空间中。当错误发生时，standby节点会在变成active节点之前确保已经从JNs中读取了所有的编辑日志，这就确保了命名空间和错误发生之前
 的状态同步。为了提供快速容错，standby节点有必要拥有最新的信息来监控集群中块的位置，为了达到这一点，DataNodes配置了两个Namenode的位置信息，并同时向两个namenode发送块信息和心跳。
-	很重要的一点是，在HA集群中，同一时刻只有一个namenode处于active状态，否则会出现错误的结果，为了保证正确性以及避免“脑裂”的出现，JNs在同一时刻只允许一个namenode写入，在错误发生时，即将变成active状态的namen
+
+    很重要的一点是，在HA集群中，同一时刻只有一个namenode处于active状态，否则会出现错误的结果，为了保证正确性以及避免“脑裂”的出现，JNs在同一时刻只允许一个namenode写入，在错误发生时，即将变成active状态的namen
 ode会向JNs中写入数据，有效避免了另一个namenode继续向JNs中写入数据。
 
 3.**IDs**
@@ -94,9 +96,7 @@ NameNode ID：HA集群中namenode的ID
 
 	以上配置的是手动HA，需要使用管理员命令来将standby节点转换为active节点
 	[可以通过ZooKeeper来转换为自动HA集群]
-	 
-	```
+
 	Usage: haadmin
 		[-transitionToActive <serviceId>]			// 转换为active节点
 		[-transitionToStandby <serviceId>]			// 转换为standby节点
-	```	
