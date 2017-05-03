@@ -55,50 +55,31 @@
     TIMESTAMP
 ```
 3.**常用命令**
-
-    在Hive中可以使用hdfs命令，即dfs命令
-
-
-    创建数据库，MySQL记录数据库的描述信息，对应HDFS上的数据库文件夹
-    ```
+```
+在Hive中可以使用hdfs命令，即dfs命令
+创建数据库，MySQL记录数据库的描述信息，对应HDFS上的数据库文件夹
     create database <basename>;
     e.g.
         CREATE DATABASE IF NOT EXISTS myhive
         COMMENT 'hive database demo'
         LOCATION '/hdfs/directory'                  // 指定数据库在HDFS上的存放位置
         WITH DBPROPERTIES ('creator'='xw','date'='2017-04-10');
-    ```
-    常看所有数据库
-    ```
+常看所有数据库
     show databases;
-    ```
-    查看数据库结构
-    ```
+查看数据库结构
     desc database <databasename> ;
-    ```
-    查看数据库结构及扩展信息
-    ```
+查看数据库结构及扩展信息
     desc database extended <databasename>;
-    ```
-    修改数据库结构,增加数据库属性
-    ```
+修改数据库结构,增加数据库属性
     alter database <databasename> set dbproperties('created'='xw'); [属性即是键值对，可以自行添加]
-    ```
-    显示所有的表
-    ```
+显示所有的表
     show tables;
-    ```
-    查看表结构
-    ```
+查看表结构
     desc <tablename>;
-    ```
-    查看表结构及扩展信息
-    ```
+查看表结构及扩展信息
     desc extended <tablename>;
     desc formatted <tablename>;         // 友好显示
-    ```
-    创建表，MySQL记录表的描述信息，对应HDFS上的表文件夹，不加修饰则是内部表[托管表 managed_table 即由Hive管理]
-    ```
+创建表，MySQL记录表的描述信息，对应HDFS上的表文件夹，不加修饰则是内部表[托管表 managed_table 即由Hive管理]
     create table <tablename>(id int, name string, age int,...)
     comment 'table description'                                         // 表的描述
     row format delimited                                                // 定义分隔符
@@ -112,38 +93,22 @@
        MAP<string,ARRAY<string>> ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|' COLLECTION ITEMS TERMINATED BY ',' MAP KEYS TERMINATED BY ':';
     ]
     注：分隔符不能为分号
-    ```
     从本地加载数据，即插入数据，即将数据put到HDFS上的对应文件夹中
-    ```
     LOAD DATA LOCAL INPATH '...[本地路径]' OVERWRITE INTO TABLE <tablename>;        // 省去local则是加载集群上的数据，该加载时移动[剪切]
                                                                                     // overwrite 会覆盖原来的数据
-    ```
-    重命名表名
-    ```
+重命名表名
     alter table <tablename> rename to <new tablename>;
-    ```
-    添加列
-    ```
+添加列
     alter table <tablename> add columns(...)
-    ```
-    复制表
-    ```
+复制表
     create table default.test1 like mybase.test2;       // 复制mybase数据库中的test2到default中的test1，只复制表结构，不复制数据
-    ```
-    创建表的时候复制数据，该功能不能用于外部表
-    ```
+创建表的时候复制数据，该功能不能用于外部表
     create table <tablename> as select ... from <tablename> where ...
-    ```
-    复制表数据，批量插入
-    ```
+复制表数据，批量插入
     insert into <tablename> select ... from <tablename> where ...
-    ```
-    导出数据，即把hive[hdfs]中的数据导出到本地
-    ```
+导出数据，即把hive[hdfs]中的数据导出到本地
     insert overwrite local directory '...[local path]' select * from test where ...
-    ```
-    连接join
-    ```
+连接join
     Hive默认的是mapjoin
     属性设置为hive.auto.convert.join，默认是true
     动态设置mapjoin
@@ -151,45 +116,29 @@
     mapjoin不支持以下操作：
         在UNION ALL, LATERAL VIEW, GROUP BY/JOIN/SORT BY/CLUSTER BY/DISTRIBUTE BY之后使用
         在UNION, JOIN, and 另一个 MAPJOIN之前使用
-    ```
-    类型转换
-    ```
+类型转换
     cast(value as type);
     select cast('100' as int) from xxx;
-    ```
-    修改分隔符
-    ```
+修改分隔符
     alter table <tablename> set serdeproperties ('field.delim' = ',');
-    ```
-    修改表位置
-    ```
+修改表位置
     alter table <tablename> set location '...[path]';
-    ```
-    保护表[不能被删除]  
-    ```
+保护表[不能被删除]  
     alter table <tablename> enable no_drop;
     alter table <tablename> disable no_drop; // 取消保护
-    ```
-    离线表[不能查询]
-    ```
+离线表[不能查询]
     alter table <tablename> enable offline;
     alter table <tablename> disable offline; // 取消离线
-    ```
-    导出表到hdfs
-    ```
+导出表到hdfs
     EXPORT TABLE employee TO '/home/xw/tmp';
-    ```
     从hdfs上导入数据到一张新表中
-    ```
     IMPORT TABLE empolyee_imported FROM '/home/xw/tmp';
-    ```
-    排序
-    ```
+排序
     1. order by         全局排序
     2. sort by          每个reducer排序，并不整体排序
     3. DISTRIBUTE BY    类似于分组
     4. CLUSTER BY       先DISTRIBUTE BY后sort by，即先分组[reducer]，后组内排序
-    ```
+```
 4.**表分类**
 ```
 1. internal/managed[内部表/托管表]    
